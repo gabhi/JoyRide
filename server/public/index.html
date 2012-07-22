@@ -124,11 +124,9 @@
 			
 			addFace();
 			
-			addParticles();
-			
 			setTimeout( function() {
 				showScreen();
-			}, 2000);
+			}, 3000);
 		}
 		
 		function addImage(path, x, y, z){
@@ -194,31 +192,6 @@
 				scene.walt.translateZ(-4);
 				world.add(scene.walt);
 			});
-		}
-		
-		function addParticles(){
-			var particle1, particle2, particle3;
-			
-			var program = function ( context ) {
-				context.beginPath();
-				context.arc( 0, 0, 1, 0, PI2, true );
-				context.fill();
-			};
-				
-			for( var i = 0; i < 40; i++){
-				particle1 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0xff0040, program: program } ) );
-				particle1.scale.x = particle1.scale.y = particle1.scale.z = 0.5;
-				world.add( particle1 );
-			}
-			/*
-
-			particle2 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0x0040ff, program: program } ) );
-			particle2.scale.x = particle2.scale.y = particle2.scale.z = 0.5;
-			scene.add( particle2 );
-
-			particle3 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0x80ff80, program: program } ) );
-			particle3.scale.x = particle3.scale.y = particle3.scale.z = 0.5;
-			scene.add( particle3 );*/
 		}
 		
 		function addPosts(){
@@ -394,6 +367,79 @@
 		}
 
 		init();
+	</script>
+	<script>
+		function BufferLoader(context, urlList, callback) {
+		  this.context = context;
+		  this.urlList = urlList;
+		  this.onload = callback;
+		  this.bufferList = new Array();
+		  this.loadCount = 0;
+		}
+		
+		BufferLoader.prototype.loadBuffer = function(url, index) {
+		  // Load buffer asynchronously
+		  var request = new XMLHttpRequest();
+		  request.open("GET", url, true);
+		  request.responseType = "arraybuffer";
+		
+		  var loader = this;
+		
+		  request.onload = function() {
+		    // Asynchronously decode the audio file data in request.response
+		    loader.context.decodeAudioData(
+		      request.response,
+		      function(buffer) {
+		        if (!buffer) {
+		          alert('error decoding file data: ' + url);
+		          return;
+		        }
+		        loader.bufferList[index] = buffer;
+		        if (++loader.loadCount == loader.urlList.length)
+		          loader.onload(loader.bufferList);
+		      }
+		    );
+		  }
+		
+		  request.onerror = function() {
+		    alert('BufferLoader: XHR error');
+		  }
+		
+		  request.send();
+		}
+		
+		BufferLoader.prototype.load = function() {
+		  for (var i = 0; i < this.urlList.length; ++i)
+		  this.loadBuffer(this.urlList[i], i);
+		}
+
+	</script>
+	<script>
+		window.onload = loadAudio;
+		var ctx;
+		var bufferLoader;
+		
+		function loadAudio() {
+			ctx = new webkitAudioContext();
+			
+			bufferLoader = new BufferLoader(
+				ctx,
+				[
+					'sounds/horse.wav'
+				],
+				finishedLoading
+			);
+			
+			bufferLoader.load();
+		}
+		
+		function finishedLoading(bufferList) {
+			// Create two sources and play them both together.
+			var source1 = ctx.createBufferSource();
+			source1.buffer = bufferList[0];
+			source1.connect(ctx.destination);
+			source1.noteOn(0);
+		}
 	</script>
 	<script src="http://127.0.0.1:9000/socket.io/socket.io.js"> </script>
 	<script>

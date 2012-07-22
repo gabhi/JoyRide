@@ -16,7 +16,7 @@
 			(Thx for the logo @Nida)!!
 		</p>
 		<p style="position: absolute;top: 501px;color: rgb(251,278,101);font-size: 2.5em;text-align: center;padding-left: 250px;">
-			"Take a ride on the wild side."
+			Take a ride on the wild side
 		</p>
 		<p style="position: absolute;top: 583px;color: #11da55;#a55h;#a55h0;#a55h0l;#a55h0l3;#a55h0;#a55h;font-size: 1.5em;text-align: center;padding-left: 149px;width: 692px;">
 			Created with HTML5 WebGL, WebSockets, DeviceOrientation.  Powered by node.js
@@ -65,7 +65,8 @@
 			scene = {
 				car : undefined,
 				greenBlobs : [],
-				horseText : undefined
+				horseText : undefined,
+				horse : undefined
 			};
 
 		function init(){
@@ -124,6 +125,8 @@
 			
 			addFace();
 			
+			//detectHorseProximity();
+			
 			setTimeout( function() {
 				showScreen();
 			}, 3000);
@@ -144,14 +147,14 @@
 		}
 		
 		function addHorsey(x, z){
-				var loader = new THREE.JSONLoader( true ),
-					mesh;
+				var loader = new THREE.JSONLoader( true );
+				
 				loader.load( "./carz_files/horse.js", function( geometry ) {
-					mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x333333, morphTargets: true } ) );
-					mesh.scale.set( 0.005, 0.005, 0.005 );
-					mesh.translateZ(z);
-					mesh.translateX(x);
-					world.add( mesh );	
+					scene.horse = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x333333, morphTargets: true } ) );
+					scene.horse.scale.set( 0.005, 0.005, 0.005 );
+					scene.horse.translateZ(z);
+					scene.horse.translateX(x);
+					world.add( scene.horse );	
 				});
 				
 				radius = 600;
@@ -162,19 +165,19 @@
 				lastKeyframe = 0, currentKeyframe = 0;
 				
 				world.loop().hook( function() {
-					if (typeof mesh === 'undefined') return;
+					if (typeof scene.horse === 'undefined') return;
 					theta += 0.2;
 					var time = Date.now() % duration;
 					var keyframe = Math.floor( time / interpolation );
 					if ( keyframe != currentKeyframe ) {
-						mesh.morphTargetInfluences[ lastKeyframe ] = 0;
-						mesh.morphTargetInfluences[ currentKeyframe ] = 1;
-						mesh.morphTargetInfluences[ keyframe ] = 0;
+						scene.horse.morphTargetInfluences[ lastKeyframe ] = 0;
+						scene.horse.morphTargetInfluences[ currentKeyframe ] = 1;
+						scene.horse.morphTargetInfluences[ keyframe ] = 0;
 						lastKeyframe = currentKeyframe;
 						currentKeyframe = keyframe;
 					}
-					mesh.morphTargetInfluences[ keyframe ] = ( time % interpolation ) / interpolation;
-					mesh.morphTargetInfluences[ lastKeyframe ] = 1 - mesh.morphTargetInfluences[ keyframe ];
+					scene.horse.morphTargetInfluences[ keyframe ] = ( time % interpolation ) / interpolation;
+					scene.horse.morphTargetInfluences[ lastKeyframe ] = 1 - scene.horse.morphTargetInfluences[ keyframe ];
 				});	
 		}
 		
@@ -367,8 +370,7 @@
 		}
 
 		init();
-	</script>
-	<script>
+	
 		function BufferLoader(context, urlList, callback) {
 		  this.context = context;
 		  this.urlList = urlList;
@@ -413,11 +415,11 @@
 		  this.loadBuffer(this.urlList[i], i);
 		}
 
-	</script>
-	<script>
-		window.onload = loadAudio;
-		var ctx;
+		/* Audio Shit */
+		//window.onload = loadAudio;
+		/*var ctx;
 		var bufferLoader;
+		var horseSound;
 		
 		function loadAudio() {
 			ctx = new webkitAudioContext();
@@ -435,11 +437,50 @@
 		
 		function finishedLoading(bufferList) {
 			// Create two sources and play them both together.
-			var source1 = ctx.createBufferSource();
-			source1.buffer = bufferList[0];
-			source1.connect(ctx.destination);
-			source1.noteOn(0);
+			horseSound = ctx.createBufferSource();
+			horseSound.buffer = bufferList[0];
+			horseSound.connect(ctx.destination);
+			// Play sound
+			//horseSound.noteOn(0);
 		}
+		
+		function playSound(buffer, time) {
+			var source = ctx.createBufferSource();
+			source.buffer = buffer;
+			source.connect(ctx.destination);
+			source.loop = true;
+			source.noteOn(time);
+		}*/
+		
+		/* Horse proximity and sound trigger for 'naaaay' sound */
+
+		/*function detectHorseProximity(){
+			var myAudio;
+			
+			world.loop().hook(function(delta){
+				if ( scene.horse && scene.horse.position ){
+					var horseX = scene.horse.position.x,
+						horseY = scene.horse.position.y,
+						horseZ = scene.horse.position.z,
+						carX = scene.car.position.x,
+						carY = scene.car.position.y,
+						carZ = scene.car.position.z;
+					
+					var distance = Math.sqrt( ((carX-horseX)^2) + ((carY-horseY)^2) + ((carZ-horseZ)^2) )
+					
+					if (Math.floor(distance) < 7 ){
+						myAudio = new Audio('sounds/horse.wav'); 
+						myAudio.addEventListener('ended', function() {
+						    this.currentTime = 0;
+						    this.play();
+						}, false);
+						myAudio.play();
+					} else {
+						console.log('not near the horse');
+					}
+				}
+			});
+		}*/
 	</script>
 	<script src="http://127.0.0.1:9000/socket.io/socket.io.js"> </script>
 	<script>
@@ -450,13 +491,11 @@
 		var socket = io.connect('http://127.0.0.1');
 		
 		socket.on('gameEvent', function (data) {
-			/*if ( !cars[data.number] ){
-				addCar(data.number);
-			}*/
 			controls_leftright = data.tiltLR;
 			controls_forwardbackward = data.tiltFB;
 			document.getElementById('messagesPerSecond').innerHTML = data.messages + ' events per second';
 		});
+		
 		setInterval( function() {
 			var speed;
 			if ( car ){

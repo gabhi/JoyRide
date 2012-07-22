@@ -115,23 +115,29 @@
 			
 			createWobble();
 			
-			detectCollisions();
+			addWayne();
+			
+			addFace();
+			
+			addParticles();
 			
 			setTimeout( function() {
 				showScreen();
 			}, 2000);
 		}
 		
-		function detectCollisions(){
-			world.loop().hook(function(delta){
-				var carPosition = Math.round(10*scene.car.matrixWorld.getPosition().z ) / 10,
-					blobPosition = Math.round(10*scene.greenBlobs[0].matrixWorld.getPosition().z ) / 10;
-					
-/* 				console.log('carz : ' + carPosition + ' blobz: ' + blobPosition ); */
-				if ( carPosition < ( blobPosition + 3 ) && carPosition > ( blobPosition - 3 ) ){
-					
-				}
-			});
+		function addWayne(){
+			// material
+	        var material = new THREE.MeshLambertMaterial({
+	            map: THREE.ImageUtils.loadTexture("images/wayne.jpg")
+	        });
+	 
+	        // cube
+	        scene.wayne = new THREE.Mesh(new THREE.CubeGeometry(3, 3, 3), material);
+			scene.wayne.translateZ(-10);
+			scene.wayne.translateX(-10);
+			scene.wayne.translateY(1);
+			world.add( scene.wayne );
 		}
 		
 		function addHorsey(x, z){
@@ -167,7 +173,47 @@
 					mesh.morphTargetInfluences[ keyframe ] = ( time % interpolation ) / interpolation;
 					mesh.morphTargetInfluences[ lastKeyframe ] = 1 - mesh.morphTargetInfluences[ keyframe ];
 				});	
+		}
+		
+		function addFace(){
+			var loader = new THREE.JSONLoader();
+			loader.load( './carz_files/WaltHeadLo.js', function ( geometry ) {
+				scene.walt = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ 
+					color: 0xbada55, 
+					shading: THREE.FlatShading, 
+					overdraw: true 
+				}));
+				scene.walt.scale.set(0.02, 0.02, 0.02);
+				scene.walt.translateX(-5);
+				scene.walt.translateY(1);
+				scene.walt.translateZ(-4);
+				world.add(scene.walt);
+			});
+		}
+		
+		function addParticles(){
+			var particle1, particle2, particle3;
 			
+			var program = function ( context ) {
+				context.beginPath();
+				context.arc( 0, 0, 1, 0, PI2, true );
+				context.fill();
+			};
+				
+			for( var i = 0; i < 40; i++){
+				particle1 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0xff0040, program: program } ) );
+				particle1.scale.x = particle1.scale.y = particle1.scale.z = 0.5;
+				world.add( particle1 );
+			}
+			/*
+
+			particle2 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0x0040ff, program: program } ) );
+			particle2.scale.x = particle2.scale.y = particle2.scale.z = 0.5;
+			scene.add( particle2 );
+
+			particle3 = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: 0x80ff80, program: program } ) );
+			particle3.scale.x = particle3.scale.y = particle3.scale.z = 0.5;
+			scene.add( particle3 );*/
 		}
 		
 		function addPosts(){
@@ -334,9 +380,9 @@
 
 			// var hasTouchEvent	= "ontouchstart" in window;
 			// if( hasTouchEvent )	{
-			 	car.hookDeviceOrientation();
+			 	//car.hookDeviceOrientation();
 			// } else {
-				//car.hookKeyboard();
+				car.hookKeyboard();
 			// }
 			
 			scene.car = world._scene.__objects[world._scene.__objects.length - 1];

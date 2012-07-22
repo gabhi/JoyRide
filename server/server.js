@@ -20,6 +20,10 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
 
+app.get('/reveal', function(req, res){
+	res.sendfile(__dirname + '/public/reveal/index.html');
+});
+
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

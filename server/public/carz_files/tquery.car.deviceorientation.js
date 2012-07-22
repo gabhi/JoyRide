@@ -62,11 +62,11 @@ tQuery.Car.register('hookDeviceOrientationLoopCb', function(deltaTime, present){
 	
 	var number = this._opts.number;
 	
-	if ( typeof controls_leftright !== 'undefined' ){
-		if ( controls_leftright === 'left'){
+	if ( typeof controls.leftright !== 'undefined' ){
+		if ( controls.leftright === 'left'){
 			this.controls().moveLeft = true;
 			this.controls().moveRight = false;
-		} else if ( controls_leftright === 'right'){
+		} else if ( controls.leftright === 'right'){
 			this.controls().moveLeft = false;
 			this.controls().moveRight = true;
 		} else {
@@ -74,11 +74,11 @@ tQuery.Car.register('hookDeviceOrientationLoopCb', function(deltaTime, present){
 			this.controls().moveLeft = false;
 		}
 	}
-	if( typeof controls_forwardbackward !== 'undefined' ){
-		if ( controls_forwardbackward === 'forward'){
+	if( typeof controls.forwardbackward !== 'undefined' ){
+		if ( controls.forwardbackward === 'forward'){
 			this.controls().moveForward = true;
 			this.controls().moveBackward = false;
-		} else if ( controls_forwardbackward === 'backward'){
+		} else if ( controls.forwardbackward === 'backward'){
 			this.controls().moveBackward = true;
 			this.controls().moveForward = false;
 		} else {

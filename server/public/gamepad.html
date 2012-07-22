@@ -43,7 +43,7 @@
 			if (window.DeviceOrientationEvent) {
 					
 				window.addEventListener('deviceorientation', function(eventData) {
-					socket.emit('update', {
+					socket.emit('deviceEvent', {
 						lr : eventData.gamma,
 						fb : eventData.beta
 					});

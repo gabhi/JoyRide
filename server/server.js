@@ -63,14 +63,14 @@ function getForwardBackward(data, factor){
 
 io.sockets.on('connection', function (socket) {
 	
-	socket.on('update', function (data) {
+	socket.on('deviceEvent', function (data) {
 
 		var leftright = getLeftRight(data, 15);
 		var forwardbackward = getForwardBackward(data, 15);
 		
 		messages++;
 		
-		io.sockets.emit('update', { 
+		io.sockets.emit('gameEvent', { 
 			number : socket.handshake.address.address,
 			tiltLR: leftright,
 			tiltFB : forwardbackward,

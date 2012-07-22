@@ -117,9 +117,9 @@
 			
 			detectCollisions();
 			
-			//setTimeout( function() {
+			setTimeout( function() {
 				showScreen();
-			//}, 1000);
+			}, 2000);
 		}
 		
 		function detectCollisions(){
@@ -334,9 +334,9 @@
 
 			// var hasTouchEvent	= "ontouchstart" in window;
 			// if( hasTouchEvent )	{
-			 	//car.hookDeviceOrientation();
+			 	car.hookDeviceOrientation();
 			// } else {
-				car.hookKeyboard();
+				//car.hookKeyboard();
 			// }
 			
 			scene.car = world._scene.__objects[world._scene.__objects.length - 1];
@@ -352,7 +352,7 @@
 		
 		var socket = io.connect('http://127.0.0.1');
 		
-		socket.on('update', function (data) {
+		socket.on('gameEvent', function (data) {
 			/*if ( !cars[data.number] ){
 				addCar(data.number);
 			}*/

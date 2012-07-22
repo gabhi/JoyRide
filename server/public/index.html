@@ -8,7 +8,7 @@
 
 <body style="margin: 0px; padding: 0px; overflow: hidden; ">
 	<div id="messagesPerSecond" style="background: transparent;font-size: 2em;position: absolute;top: 0;color: white;"></div>
-	<div id="milesPerHour" style="background: transparent;font-size: 2em;position: absolute;bottom: 0px; left: 0px;color: #00FF00;"></div>
+	<div id="milesPerHour" style="text-weight: bold;background: transparent;font-size: 2.3em;position: absolute;bottom: 0px; left: 0px;color: #00FF00;"></div>
 	
 	<div id="splash" style="position: absolute;top: 0;bottom: 0;right: 0;left: 0;text-align: center;background-size: 650px;background-color: #222;">
 		<img src="./images/fulllogo.png" style="width: 671px;padding-left: 24px;height: 523px;display: block;padding-left: 223px;">
@@ -115,7 +115,12 @@
 			
 			createWobble();
 			
-			addWayne();
+			addImage("images/wayne.jpg", -10, 1, -10);
+			addImage('images/cats.png', -6, 1, -6);
+			addImage('images/lolcats.jpg', -20, 1, 10);
+			addImage('images/orly.jpg', 2, 1, -10);
+			addImage('images/shakeweight.jpg', -14, 1, 5);
+			addImage('images/chocolaterain.jpg', 3, 1, -12);
 			
 			addFace();
 			
@@ -126,18 +131,18 @@
 			}, 2000);
 		}
 		
-		function addWayne(){
+		function addImage(path, x, y, z){
 			// material
 	        var material = new THREE.MeshLambertMaterial({
-	            map: THREE.ImageUtils.loadTexture("images/wayne.jpg")
+	            map: THREE.ImageUtils.loadTexture(path)
 	        });
 	 
 	        // cube
-	        scene.wayne = new THREE.Mesh(new THREE.CubeGeometry(3, 3, 3), material);
-			scene.wayne.translateZ(-10);
-			scene.wayne.translateX(-10);
-			scene.wayne.translateY(1);
-			world.add( scene.wayne );
+	        var mesh = new THREE.Mesh(new THREE.CubeGeometry(2, 2, 2), material);
+			mesh.translateZ(z);
+			mesh.translateX(x);
+			mesh.translateY(y);
+			world.add( mesh );
 		}
 		
 		function addHorsey(x, z){
@@ -179,12 +184,12 @@
 			var loader = new THREE.JSONLoader();
 			loader.load( './carz_files/WaltHeadLo.js', function ( geometry ) {
 				scene.walt = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ 
-					color: 0xbada55, 
-					shading: THREE.FlatShading, 
-					overdraw: true 
+					color: 0x666666, 
+					ambient : 0x444444,
+					envMap	: tQuery.createCubeTexture('skybox')
 				}));
 				scene.walt.scale.set(0.02, 0.02, 0.02);
-				scene.walt.translateX(-5);
+				scene.walt.translateX(20);
 				scene.walt.translateY(1);
 				scene.walt.translateZ(-4);
 				world.add(scene.walt);
@@ -380,9 +385,9 @@
 
 			// var hasTouchEvent	= "ontouchstart" in window;
 			// if( hasTouchEvent )	{
-			 	//car.hookDeviceOrientation();
+			 	car.hookDeviceOrientation();
 			// } else {
-				car.hookKeyboard();
+				//car.hookKeyboard();
 			// }
 			
 			scene.car = world._scene.__objects[world._scene.__objects.length - 1];
@@ -407,8 +412,14 @@
 			document.getElementById('messagesPerSecond').innerHTML = data.messages + ' events per second';
 		});
 		setInterval( function() {
+			var speed;
 			if ( car ){
-				document.getElementById('milesPerHour').innerHTML = ((car._car.speed > 0) ? (Math.round(100*(car._car.speed*20))/100) : 0) + ' MPH';	
+				if ( car._car.speed < 0 ){
+					speed = (Math.round(100*(car._car.speed*20))/100) * -1;
+				} else {
+					speed = (Math.round(100*(car._car.speed*20))/100);
+				}
+				document.getElementById('milesPerHour').innerHTML = speed + ' MPH';	
 			}
 		}, 50);
 	</script>

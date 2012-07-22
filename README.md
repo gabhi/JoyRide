@@ -10,7 +10,7 @@ Installation
 
 	git clone https://github.com/mstuart/JoyRide.git && cd JoyRide/server
 	node server.js
-	Go to http://<your ip>:9000 on your iPhone/iPad with iOS 4.2 and later
+	Go to http://<your ip>:9000/gamepad.html on your iPhone/iPad with iOS 4.2 and later
 	Turn your phone to the left and tilt left/right to turn the car.  Tilt forward/backward to press the gas or the brake.
 	Have a nice cruise!
 

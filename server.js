@@ -21,66 +21,62 @@ app.get('/', function (req, res) {
 
 /* Start up server */
 server = app.listen(9000);
-
-console.log("Server listening on port " + app.get('port'));
+console.log("Server listening on port 9000");
 
 var socket = io.listen(server),
-		users = {},
-		lastLeftRight,
-		lastForwardBackward,
-		messagesPerSecond,
-		messages = 0;
-		
-	function getLeftRight(data, factor){
-		var leftright;
-		
-		if (data.fb < -factor){
-			leftright = 'left';
-		} else if (data.fb > -factor && data.fb < factor){
-			leftright = 'center';
-		} else {
-			leftright = 'right';
-		}
-		
-		return leftright;
+	users = {},
+	lastLeftRight,
+	lastForwardBackward,
+	messagesPerSecond,
+	messages = 0;
+	
+function getLeftRight(data, factor){
+	var leftright;
+	
+	if (data.fb < -factor){
+		leftright = 'left';
+	} else if (data.fb > -factor && data.fb < factor){
+		leftright = 'center';
+	} else {
+		leftright = 'right';
 	}
 	
-	function getForwardBackward(data, factor){
-		var forwardbackward;
-		
-		if (data.lr < -factor ){
-			forwardbackward = 'backward';
-		} else if (data.lr > factor ){
-			forwardbackward = 'forward';
-		} else {
-			forwardbackward = 'still';
-		}
-		
-		return forwardbackward;
+	return leftright;
+}
+
+function getForwardBackward(data, factor){
+	var forwardbackward;
+	
+	if (data.lr < -factor ){
+		forwardbackward = 'backward';
+	} else if (data.lr > factor ){
+		forwardbackward = 'forward';
+	} else {
+		forwardbackward = 'still';
 	}
 	
-	socket.sockets.on('connection', function (client) {
-		
-		client.on('deviceEvent', function (data) {
+	return forwardbackward;
+}
+
+socket.sockets.on('connection', function (client) {
 	
-			var leftright = getLeftRight(data, 15);
-			var forwardbackward = getForwardBackward(data, 15);
-			
-			messages++;
-			
-			client.emit('gameEvent', { 
-				number : socket.handshake.address.address,
-				tiltLR: leftright,
-				tiltFB : forwardbackward,
-				messages : messagesPerSecond
-			});
+	client.on('deviceEvent', function (data) {
+
+		var leftright = getLeftRight(data, 15);
+		var forwardbackward = getForwardBackward(data, 15);
+		
+		messages++;
+		
+		client.emit('gameEvent', { 
+			number : socket.handshake.address.address,
+			tiltLR: leftright,
+			tiltFB : forwardbackward,
+			messages : messagesPerSecond
 		});
 	});
-	
-	/*setInterval(function(){
-		messagesPerSecond = messages;
-		messages = 0;
-	}, 1000);*/	
+});
 
-/* Start socket listeners */
-//require('./lib/game-server');
+/*setInterval(function(){
+	messagesPerSecond = messages;
+	messages = 0;
+}, 1000);*/	

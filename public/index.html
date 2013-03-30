@@ -21,6 +21,12 @@
 		<br/>
 	</div>
 
+	<script>
+		var controls = {
+			leftright: undefined,
+			forwardbackward: undefined
+		};
+	</script>
 	<script src="./carz_files/tquery-bundle.js"></script>
 	<script src="./carz_files/tquery.norequirejs.js"></script>
 
@@ -59,11 +65,9 @@
 
 	<script src="./carz_files/game.js"></script>
 
-	<script src="http://127.0.0.1:9000/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var controls = {};
-
-		var socket = io.connect('http://127.0.0.1');
+		var socket = io.connect();
 
 		socket.on('gameEvent', function (data) {
 			controls.leftright = data.tiltLR;

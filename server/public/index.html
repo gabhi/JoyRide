@@ -24,65 +24,62 @@
 	<script src="./carz_files/tquery-bundle.js"></script>
 	<script src="./carz_files/tquery.norequirejs.js"></script>
 
-	<script src="./carz_files/THREEx.KeyboardState.js">	</script>
-	<script src="./carz_files/tquery.keyboard.js">	</script>
+	<script src="./carz_files/THREEx.KeyboardState.js"></script>
+	<script src="./carz_files/tquery.keyboard.js"></script>
 
 	<script src="./carz_files/THREEx.DeviceOrientationState.js"></script>
 	<script src="./carz_files/tquery.deviceorientation.js"></script>
 
-	<script src="./carz_files/tquery.grassground.js">	</script>
-	<script src="./carz_files/tquery.light.shadow.js">	</script>
+	<script src="./carz_files/tquery.grassground.js"></script>
+	<script src="./carz_files/tquery.light.shadow.js"></script>
 
 	<script src="./carz_files/tquery.cubetexture.js"></script>
-	<script src="./carz_files/tquery.skymap.js">	</script>
+	<script src="./carz_files/tquery.skymap.js"></script>
 
 	<script src="./carz_files/Car.js"></script>
 	<script src="./carz_files/tquery.car.js"></script>
 	<script src="./carz_files/tquery.car.keyboard.js"></script>
 	<script src="./carz_files/tquery.car.deviceorientation.js"></script>
 	<script src="./carz_files/tquery.car.cameracontrols.js"></script>
-	
+
 	<script src="./carz_files/fonts/droid/droid_serif_bold.typeface.js"></script>
 	<script src="./carz_files/tquery.text.js"></script>
-	
+
 	<script src="./carz_files/THREEx.GeometryWobble.js"></script>
 	<script src="./carz_files/tquery.geometry.wobble.js"></script>
 
 	<script>
 	document.addEventListener('keydown', function(event){
-	    // if it is keydown on a arrow, prevent default
-	    if( event.keyCode >= 37 && event.keyCode <= 40 ){
-	        event.preventDefault();
-	    }
+		// if it is keydown on a arrow, prevent default
+		if (event.keyCode >= 37 && event.keyCode <= 40) {
+			event.preventDefault();
+		}
 	}, true);
 	</script>
-	
+
 	<script src="./carz_files/game.js"></script>
 
-	<script src="http://127.0.0.1:9000/socket.io/socket.io.js"> </script>
+	<script src="http://127.0.0.1:9000/socket.io/socket.io.js"></script>
 	<script>
-		var controls = {
-			leftright : undefined,
-			forwardbackward : undefined
-		};
-		
+		var controls = {};
+
 		var socket = io.connect('http://127.0.0.1');
-		
+
 		socket.on('gameEvent', function (data) {
 			controls.leftright = data.tiltLR;
 			controls.forwardbackward = data.tiltFB;
 			document.getElementById('messagesPerSecond').innerHTML = data.messages + ' events per second';
 		});
-		
-		setInterval( function() {
+
+		setInterval(function () {
 			var speed;
-			if ( car ){
-				if ( car._car.speed < 0 ){
-					speed = (Math.round(100*(car._car.speed*20))/100) * -1;
+			if (car) {
+				if (car._car.speed < 0) {
+					speed = (Math.round(100 * (car._car.speed * 20)) / 100) * -1;
 				} else {
-					speed = (Math.round(100*(car._car.speed*20))/100);
+					speed = (Math.round(100 * (car._car.speed * 20)) / 100);
 				}
-				document.getElementById('milesPerHour').innerHTML = speed + ' MPH';	
+				document.getElementById('milesPerHour').innerHTML = speed + ' MPH';
 			}
 		}, 50);
 	</script>

@@ -3,7 +3,7 @@
 var io = require('socket.io'),
 	express = require('express'),
 	http = require('http'),
-	app = express.createServer(),
+	app = express(),
 	server;
 
 app.configure(function(){
@@ -16,6 +16,7 @@ app.configure(function(){
 });
 
 app.get('/', function (req, res) {
+	console.log(__dirname);
 	res.sendfile(__dirname + '/public/index.html');
 });
 
@@ -29,10 +30,10 @@ var socket = io.listen(server),
 	lastForwardBackward,
 	messagesPerSecond,
 	messages = 0;
-	
+
 function getLeftRight(data, factor){
 	var leftright;
-	
+
 	if (data.fb < -factor){
 		leftright = 'left';
 	} else if (data.fb > -factor && data.fb < factor){
@@ -40,13 +41,13 @@ function getLeftRight(data, factor){
 	} else {
 		leftright = 'right';
 	}
-	
+
 	return leftright;
 }
 
 function getForwardBackward(data, factor){
 	var forwardbackward;
-	
+
 	if (data.lr < -factor ){
 		forwardbackward = 'backward';
 	} else if (data.lr > factor ){
@@ -54,21 +55,20 @@ function getForwardBackward(data, factor){
 	} else {
 		forwardbackward = 'still';
 	}
-	
+
 	return forwardbackward;
 }
 
 socket.sockets.on('connection', function (client) {
-	
+
 	client.on('deviceEvent', function (data) {
 
 		var leftright = getLeftRight(data, 15);
 		var forwardbackward = getForwardBackward(data, 15);
-		
+
 		messages++;
-		
-		client.emit('gameEvent', { 
-			number : socket.handshake.address.address,
+
+		client.emit('gameEvent', {
 			tiltLR: leftright,
 			tiltFB : forwardbackward,
 			messages : messagesPerSecond
@@ -79,4 +79,4 @@ socket.sockets.on('connection', function (client) {
 /*setInterval(function(){
 	messagesPerSecond = messages;
 	messages = 0;
-}, 1000);*/	
+}, 1000);*/

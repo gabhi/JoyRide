@@ -27,32 +27,6 @@
 			forwardbackward: undefined
 		};
 	</script>
-	<!--<script src="/lib/tquery-bundle.js"></script>
-	<script src="/lib/tquery.norequirejs.js"></script>
-
-	<script src="/lib/THREEx.KeyboardState.js"></script>
-	<script src="/lib/tquery.keyboard.js"></script>
-
-	<script src="/lib/THREEx.DeviceOrientationState.js"></script>
-	<script src="/lib/tquery.deviceorientation.js"></script>
-
-	<script src="/lib/tquery.grassground.js"></script>
-	<script src="/lib/tquery.light.shadow.js"></script>
-
-	<script src="/lib/tquery.cubetexture.js"></script>
-	<script src="/lib/tquery.skymap.js"></script>
-
-	<script src="/lib/Car.js"></script>
-	<script src="/lib/tquery.car.js"></script>
-	<script src="/lib/tquery.car.keyboard.js"></script>
-	<script src="/lib/tquery.car.deviceorientation.js"></script>
-	<script src="/lib/tquery.car.cameracontrols.js"></script>
-
-	<script src="/lib/fonts/droid/droid_serif_bold.typeface.js"></script>
-	<script src="/lib/tquery.text.js"></script>
-
-	<script src="/lib/THREEx.GeometryWobble.js"></script>
-	<script src="/lib/tquery.geometry.wobble.js"></script>-->
 
 	<script>
 	document.addEventListener('keydown', function(event){
@@ -68,7 +42,7 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect();
+		var socket = io.connect("http://192.168.1.116");
 
 		socket.on('gameEvent', function (data) {
 			controls.leftright = data.tiltLR;

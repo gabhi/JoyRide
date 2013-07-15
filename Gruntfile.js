@@ -46,7 +46,7 @@ module.exports = function (grunt) {
 		},
 		uglify: {
 			dist: {
-				src: [ "<banner:meta.banner>", 
+				src: [ "<banner:meta.banner>",
 					"public/lib/tquery-bundle.js",
 					"public/lib/tquery.norequirejs.js",
 					"public/lib/THREEx.KeyboardState.js",
@@ -80,6 +80,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-concat");
+
+	// Lint task that runs JSHint over files.
+	grunt.registerTask("lint", ["jshint"]);
 
 	// Default task.
 	grunt.registerTask("default", ["jshint", "concat", "uglify"]);

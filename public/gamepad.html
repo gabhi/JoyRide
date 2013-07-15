@@ -3,39 +3,22 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<title>
-			Ferraris + WebSockets + WebGL = oMG!
-		</title>
-		<style>
-			.title {
 
-			    /* Abs positioning makes it not take up vert space */
-			    position: absolute;
-			    top: 0;
-			    left: 0;
+		<title>Ferraris + WebSockets + WebGL = oMG!</title>
 
-			    /* Border is the new background */
-			    background: none;
-
-			    /* Rotate from top left corner (not default) */
-			    -webkit-transform-origin: 0 0;
-			    -moz-transform-origin:    0 0;
-			    -ms-transform-origin:     0 0;
-			    -o-transform-origin:      0 0;
-
-			    -webkit-transform: rotate(90deg);
-			    -moz-transform:    rotate(90deg);
-			    -ms-transform:     rotate(90deg);
-			    -o-transform:      rotate(90deg);
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="/css/app.css">
 	</head>
-	<body style="margin: 0px; padding: 0px; overflow: hidden; height: 450px;">
-		<div class="title" style="top: 161px; left: 265px; width: 500px;">Press red to brake.</div>
-		<div class="title" style="top: 143px; left: 291px; width: 500px;">Press green to accelerate.</div>
-		<div class="title" style="top: 157px; left: 237px;">Tilt left/right to turn.</div>
-		<div id="brake" style="height: 50px; background-color: red; border-radius: 100px; width: 50px; padding: 50px; position: absolute; top: 30px; left: 50px;"></div>
-		<div id="gas" style="height: 50px; background-color: green; border-radius: 100px; width: 50px; padding: 50px; position: absolute; top: 250px; left: 50px; margin-bottom: 100px;"></div>
+	<body>
+
+		<!-- Help text -->
+		<div class="title red">Press red to brake.</div>
+		<div class="title green">Press green to accelerate.</div>
+		<div class="title sub">Tilt left/right to turn.</div>
+
+		<!-- Game pad -->
+		<div class="brake"></div>
+		<div class="gas"></div>
+
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/js/jquery-2.0.3.min.js"></script>
 		<script>

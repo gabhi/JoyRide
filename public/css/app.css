@@ -1,0 +1,65 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	height: 450px;
+}
+
+.title {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: none;
+
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+	transform-origin: 0 0;
+
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.title.red {
+	width: 500px;
+	top: 161px;
+	left: 265px;
+}
+
+.title.green {
+	width: 500px;
+	top: 143px;
+	left: 291px;
+}
+
+.title.sub {
+	top: 157px;
+	left: 237px;
+}
+
+.brake {
+	height: 50px;
+	background-color: red;
+	border-radius: 100px;
+	width: 50px;
+	padding: 50px;
+	position: absolute;
+	top: 30px;
+	left: 50px;
+}
+
+.gas {
+	height: 50px;
+	background-color: green;
+	border-radius: 100px;
+	width: 50px;
+	padding: 50px;
+	position: absolute;
+	top: 250px;
+	left: 50px;
+	margin-bottom: 100px;
+}

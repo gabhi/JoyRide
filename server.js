@@ -3,7 +3,9 @@
 var io = require('socket.io'),
 	express = require('express'),
 	http = require('http'),
+	controls = require('./lib/controls'),
 	app = express(),
+	socket,
 	server;
 
 app.configure(function(){
@@ -22,61 +24,22 @@ app.get('/', function (req, res) {
 
 /* Start up server */
 server = app.listen(9000);
+socket = io.listen(server);
 console.log("Server listening on port 9000");
 
-var socket = io.listen(server),
-	users = {},
-	lastLeftRight,
-	lastForwardBackward,
-	messagesPerSecond,
-	messages = 0;
+console.log(JSON.stringify(controls));
 
-function getLeftRight(data, factor){
-	var leftright;
-
-	if (data.fb < -factor){
-		leftright = 'left';
-	} else if (data.fb > -factor && data.fb < factor){
-		leftright = 'center';
-	} else {
-		leftright = 'right';
-	}
-
-	return leftright;
-}
-
-function getForwardBackward(data, factor){
-	var forwardbackward;
-
-	if (data.lr < -factor ){
-		forwardbackward = 'backward';
-	} else if (data.lr > factor ){
-		forwardbackward = 'forward';
-	} else {
-		forwardbackward = 'still';
-	}
-
-	return forwardbackward;
-}
-
+/* Set up socket event listeners */
 socket.sockets.on('connection', function (client) {
 
+	/* On deviceEvent, calculate the gamepad's position, and emit a gameEvent back to the game screen */
 	client.on('deviceEvent', function (data) {
-
-		var leftright = getLeftRight(data, 15);
-		var forwardbackward = getForwardBackward(data, 15);
-
-		messages++;
+		var leftright = controls.getLeftRight(data, 15);
+		var forwardbackward = controls.getForwardBackward(data, 15);
 
 		client.emit('gameEvent', {
 			tiltLR: leftright,
-			tiltFB : forwardbackward,
-			messages : messagesPerSecond
+			tiltFB : forwardbackward
 		});
 	});
 });
-
-/*setInterval(function(){
-	messagesPerSecond = messages;
-	messages = 0;
-}, 1000);*/

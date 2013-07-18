@@ -5,6 +5,8 @@ JoyRide
 
 A WebGL experience created with tQuery, three.js, and DeviceOrientation API.  Powered by node.js, express, and socket.io.
 
+NOTE: This was created in less than 24 hours at iOSDevCamp 2012!
+
 Installation
 ------------
 
